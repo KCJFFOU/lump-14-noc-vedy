@@ -29,9 +29,9 @@ DESCRIPTIONS = {
  'pron_rel':'Vyšší zastoupení zájmen', 'prep_rel':'Vyšší zastoupení předložek',
  'num_rel':'Vyšší zastoupení číslovek', 'fic_score':'Vyšší zastoupení slovní zásoby typické pro beletrii',
  'MHD':'Větší hloubka větné stavby', 'adv_rel':'Vyšší zastoupení příslovcí',
- 'MDD':'Delší větné vazby', 'dem_pron_rel':'Vyšší podíl ukazovacích zájmen mezi zájmeny',
+ 'MDD':'Delší větné vazby', 'dem_pron_rel':'Vyšší zastoupení ukazovacích zájmen',
  'pers_pron_rel':'Vyšší podíl osobních zájmen mezi zájmeny',
- 'part_rel':'Vyšší zastoupení částic', 'dat_rel':'Vyšší podíl třetího pádu mezi pádově označenými slovy',
+ 'part_rel':'Vyšší zastoupení částic', 'dat_rel':'Vyšší podíl slov ve třetím pádě',
 }
 
 @st.cache_resource(show_spinner=False)
@@ -50,8 +50,8 @@ def fmt(value, places=6):
     return '—' if value is None else f'{value:.{places}f}'.replace('.', ',')
 
 st.title('LUMP-14')
-st.caption('Jazyk pod lupou · Noc vědy 2026')
-st.write('Vložte český článek a podívejte se, jaké jazykové znaky v něm rozpozná lingvistický model.')
+st.caption('Language-Use Manipulation Detector · Noc vědy 2026')
+st.write('Vložte český článek a podívejte se, jaké jazykové znaky v něm rozpozná lingvistický model LUMP-14.')
 mode = st.radio('Jak chcete článek vložit?', ['Vložit text', 'Nahrát soubor TXT'], horizontal=True)
 if mode == 'Vložit text':
     article = st.text_area('Text článku', height=250, placeholder='Sem vložte celý článek…')
@@ -88,9 +88,9 @@ if result:
     green = [x for x in active if x['favored'] == 'SOUND']
     red = [x for x in active if x['favored'] == 'FLAWED']
     if r['prediction'] == 'SOUND':
-        css, title, subtitle = 'green', '🟢 ZELENÁ', 'Jazykové znaky důvěryhodnějších článků'
+        css, title, subtitle = 'green', '🟢 ZELENÁ', 'Korektní text'
     elif r['prediction'] == 'FLAWED':
-        css, title, subtitle = 'red', '🔴 ČERVENÁ', 'Jazykové znaky problematických článků'
+        css, title, subtitle = 'red', '🔴 ČERVENÁ', 'Problematický text'
     else:
         css, title, subtitle = 'neutral', '⚪ NEDOSTATEK SIGNÁLŮ', 'Pro vyhodnocení jsou potřeba alespoň tři aktivní jazykové znaky.'
     st.markdown(f'<div class="result {css}"><div class="big">{title}</div><div class="small">{subtitle}</div></div>', unsafe_allow_html=True)
@@ -104,8 +104,7 @@ if result:
             symbol = '🟢' if row['favored'] == 'SOUND' else '🔴'
             st.write(f"{symbol} {DESCRIPTIONS[row['feature']]}")
     else:
-        st.write('Žádný z příznaků nepřekročil svou hranici.')
-    st.info('LUMP hodnotí jazykové charakteristiky, nikoli pravdivost informací. Zelená ani červená není ověřením jednotlivých tvrzení.')
+        st.write('Žádný z příznaků nebyl vyhodnocen jako významný.')
     with st.expander('Technický protokol · všech 14 příznaků'):
         st.write('Skóre je vážený jazykový index, nikoli pravděpodobnost ani procento pravdivosti.')
         st.write(f"**Skóre:** {fmt(r['score'], 12)} · **Rozhodovací hranice P2:** {fmt(r['threshold'], 12)}")
