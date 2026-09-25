@@ -59,7 +59,7 @@ h1 {letter-spacing:-.045em;font-weight:800!important}
 NAMES = {
  'conj_rel':'Spojky', 'noun_rel':'Podstatná jména', 'pub_score':'Publicistická slovní zásoba',
  'pron_rel':'Zájmena', 'prep_rel':'Předložky', 'num_rel':'Číslovky',
- 'fic_score':'Beletristická slovní zásoba', 'MHD':'Hloubka větné stavby',
+ 'fic_score':'Beletristická slovní zásoba', 'MHD':'Hloubka větného grafu',
  'adv_rel':'Příslovce', 'MDD':'Délka větných vazeb', 'dem_pron_rel':'Ukazovací zájmena',
  'pers_pron_rel':'Osobní zájmena', 'part_rel':'Částice', 'dat_rel':'Třetí pád',
 }
@@ -68,8 +68,8 @@ DESCRIPTIONS = {
  'pub_score':'Vyšší zastoupení publicistické slovní zásoby',
  'pron_rel':'Vyšší zastoupení zájmen', 'prep_rel':'Vyšší zastoupení předložek',
  'num_rel':'Vyšší zastoupení číslovek', 'fic_score':'Vyšší zastoupení beletristické slovní zásoby',
- 'MHD':'Větší hloubka větné stavby', 'adv_rel':'Vyšší zastoupení příslovcí',
- 'MDD':'Delší větné vazby', 'dem_pron_rel':'Vyšší podíl ukazovacích zájmen mezi zájmeny',
+ 'MHD':'Hlubší větný graf', 'adv_rel':'Vyšší zastoupení příslovcí',
+ 'MDD':'Delší větné vazby', 'dem_pron_rel':'Vyšší zastoupení ukazovacích zájmen',
  'pers_pron_rel':'Vyšší zastoupení osobních zájmen',
  'part_rel':'Vyšší zastoupení částic', 'dat_rel':'Vyšší podíl slov v třetím pádě',
 }
