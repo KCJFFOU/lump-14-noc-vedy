@@ -100,7 +100,7 @@ st.markdown('''<div class="lump-hero">
 </div>''', unsafe_allow_html=True)
 st.markdown('<div class="lump-section">01 / VSTUPNÍ TEXT</div>', unsafe_allow_html=True)
 st.write('Vložte český text a podívejte se, jaké jazykové rysy v něm lingvistický model rozpozná.')
-mode = st.radio('Jak chcete článek vložit?', ['Vložit text', 'Nahrát soubor TXT'], horizontal=True)
+mode = st.radio('Jak chcete text vložit?', ['Vložit text', 'Nahrát soubor TXT'], horizontal=True)
 if mode == 'Vložit text':
     article = st.text_area('Text článku', height=250, placeholder='Sem vložte celý článek…')
 else:
@@ -154,11 +154,11 @@ if result:
     green = [x for x in active if x['favored'] == 'SOUND']
     red = [x for x in active if x['favored'] == 'FLAWED']
     if r['prediction'] == 'SOUND':
-        css, title, subtitle = 'green', '🟢 ZELENÁ', 'Jazykové znaky důvěryhodnějších článků'
+        css, title, subtitle = 'green', '🟢 ZELENÁ', 'Jazyk standardní žurnalistiky'
     elif r['prediction'] == 'FLAWED':
-        css, title, subtitle = 'red', '🔴 ČERVENÁ', 'Jazykové znaky problematických článků'
+        css, title, subtitle = 'red', '🔴 ČERVENÁ', 'Rizikové jazykové chování'
     else:
-        css, title, subtitle = 'neutral', '⚪ NEDOSTATEK SIGNÁLŮ', 'Pro vyhodnocení jsou potřeba alespoň tři aktivní jazykové znaky.'
+        css, title, subtitle = 'neutral', '⚪ NEDOSTATEK SIGNÁLŮ', 'Pro vyhodnocení jsou potřeba alespoň tři aktivní jazykové rysy.'
     st.markdown(f'<div class="result {css}"><div class="big">{title}</div><div class="small">{subtitle}</div></div>', unsafe_allow_html=True)
     # Vizuální škála používá pouze existující skóre a P2; nezasahuje do rozhodování.
     if r['score'] is not None and r['prediction'] in ('SOUND', 'FLAWED'):
@@ -188,7 +188,6 @@ if result:
             st.markdown(f'<div class="lump-feature"><span class="dot {color}"></span><span class="description">{escape(DESCRIPTIONS[row["feature"]])}</span><span class="code">{escape(row["feature"])}</span></div>', unsafe_allow_html=True)
     else:
         st.write('Žádný z příznaků nepřekročil svou hranici.')
-    st.info('LUMP hodnotí jazykové charakteristiky, nikoli pravdivost informací. Zelená ani červená není ověřením jednotlivých tvrzení.')
     with st.expander('Technický protokol · všech 14 příznaků'):
         st.write('Skóre je vážený jazykový index, nikoli pravděpodobnost ani procento pravdivosti.')
         st.write(f"**Skóre:** {fmt(r['score'], 12)} · **Rozhodovací hranice P2:** {fmt(r['threshold'], 12)}")
