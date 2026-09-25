@@ -17,9 +17,9 @@ st.markdown('''<style>
 </style>''', unsafe_allow_html=True)
 
 NAMES = {
- 'conj_rel':'Spojky', 'noun_rel':'Podstatná jména', 'pub_score':'Slovní zásoba typická pro publicistiku',
+ 'conj_rel':'Spojky', 'noun_rel':'Podstatná jména', 'pub_score':'Publicistická slovní zásoba',
  'pron_rel':'Zájmena', 'prep_rel':'Předložky', 'num_rel':'Číslovky',
- 'fic_score':'Slovní zásoba typická pro beletrii', 'MHD':'Hloubka větné stavby',
+ 'fic_score':'Beletristická slovní zásoba', 'MHD':'Hloubka větné stavby',
  'adv_rel':'Příslovce', 'MDD':'Délka větných vazeb', 'dem_pron_rel':'Ukazovací zájmena',
  'pers_pron_rel':'Osobní zájmena', 'part_rel':'Částice', 'dat_rel':'Třetí pád',
 }
