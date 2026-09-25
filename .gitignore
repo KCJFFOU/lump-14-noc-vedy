@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.stanza_resources/
+stanza_resources/
+.venv/
+.env
+*.json
+!*.example.json
