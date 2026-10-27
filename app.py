@@ -2,13 +2,16 @@
 from __future__ import annotations
 import json
 import threading
+import logging
+import time
 import requests
 import streamlit as st
 import stanza
 import LUMP14_aplikace as lump
 
 MAX_CHARS = 12000  # ochrana cloudového prostředí; nejde o parametr modelu
-QUEUE_WAIT_SECONDS = 30
+QUEUE_WAIT_SECONDS = 0  # Nehromadit čekající relace na Streamlit Cloud.
+logger = logging.getLogger("lump14")
 
 st.set_page_config(page_title='LUMP-14 | Noc vědy', page_icon='🔎', layout='centered')
 st.markdown('''<style>
@@ -125,23 +128,29 @@ if st.button('Analyzovat článek', type='primary', use_container_width=True):
         try:
             with st.spinner('Připravuji jazykové modely… Při prvním spuštění to může chvíli trvat.'):
                 fic, pub, pipeline, analysis_lock = resources()
-            with st.spinner('Čekám na volnou analýzu…'):
-                acquired = analysis_lock.acquire(timeout=QUEUE_WAIT_SECONDS)
+            # Fail-fast: návštěvníci nečekají ve vláknech a nevytvářejí frontu.
+            acquired = analysis_lock.acquire(blocking=False)
             if not acquired:
-                st.warning('Aplikace právě zpracovává další článek. Zkuste analýzu za chvíli znovu.')
+                st.warning('Probíhá jiná analýza. Počkejte prosím chvíli a klikněte znovu na Analyzovat článek. Požadavek není zařazen do fronty.')
             else:
+                started = time.monotonic()
+                logger.info('Analýza zahájena (znaků=%d)', len(article))
                 try:
                     with st.spinner('Analyzuji článek: MorphoDiTa a syntaktická analýza Stanzou…'):
                         result = lump.analyze(article, pipeline, fic, pub)
                     st.session_state['lump_result'] = result
                     st.session_state['lump_input'] = article
                 finally:
+                    logger.info('Analýza skončila (trvání=%.1f s)', time.monotonic() - started)
                     analysis_lock.release()
         except requests.exceptions.Timeout:
+            logger.exception('Timeout MorphoDiTa')
             st.error('Jazyková služba MorphoDiTa neodpověděla včas. Zkuste analýzu znovu za chvíli.')
         except requests.exceptions.RequestException:
+            logger.exception('Chyba spojení MorphoDiTa')
             st.error('Nepodařilo se spojit s jazykovou službou MorphoDiTa. Zkontrolujte připojení nebo to zkuste později.')
         except Exception as exc:
+            logger.exception('Chyba analýzy')
             st.error('Analýzu se nepodařilo dokončit. Zkuste to prosím znovu.')
             with st.expander('Technické podrobnosti chyby'):
                 st.code(f'{type(exc).__name__}: {exc}')

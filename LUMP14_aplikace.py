@@ -54,7 +54,7 @@ def morphodita_tag(text: str) -> list[dict]:
     # Match original model and vertical output. Sending data as multipart is supported by API.
     response = requests.post(MORPHODITA_URL,
         files={'data': ('text.txt', text.encode('utf-8'), 'text/plain')},
-        data={'model': MODEL, 'output': 'vertical'}, timeout=180)
+        data={'model': MODEL, 'output': 'vertical'}, timeout=(10, 45))
     response.raise_for_status()
     vertical = response.json().get('result')
     if not vertical:
